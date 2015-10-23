@@ -1,7 +1,7 @@
 #!/bin/bash
 #pobieram do zmiennej zawartosc strony i od razu filtruje do linijki ktora zawiera wszytkie
 
-LINIA=$(GET -a http://nbp.pl/home.aspx?f=/kursy/kursya.html|grep 'Nazwa waluty') 
+LINIA=$(wget -q -O- http://nbp.pl/home.aspx?f=/kursy/kursya.html |grep 'Nazwa waluty') 
 #aby kozystac z grepa musze rozbic ta linie na wiele innych
 #dzieki tr zamieniam kazdy znak konca znacznika na znak nowej lini i potem
 #bo potrzebne wartosci zawsze sa w roznych kolumnach i wierszach tabeli 
