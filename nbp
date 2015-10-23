@@ -1,24 +1,20 @@
 #!/bin/bash
+#by mako
 #pobieram do zmiennej zawartosc strony i od razu filtruje do linijki ktora zawiera wszytkie
 
 LINIA=$(wget -q -O- http://nbp.pl/home.aspx?f=/kursy/kursya.html |grep 'Nazwa waluty') 
-#aby kozystac z grepa musze rozbic ta linie na wiele innych
-#dzieki tr zamieniam kazdy znak konca znacznika na znak nowej lini i potem
-#bo potrzebne wartosci zawsze sa w roznych kolumnach i wierszach tabeli 
-#czyli <tr><td>itd..
-#filtruje grepem aby uzyskac tylko i wylacznie w kazdej lini potrzebne ciagi znakow
+#tr -> Translate, squeeze, and/or delete characters 
 echo $LINIA | tr '\>' '\n'|grep -v '^<\|^[[:upper:]][[:lower:]]\|-\|^[[:blank:]]'|tr '\<' '\n'|grep -v '/\|\.[[:alpha:]]'>linie
-#kazda pozniejsza kolumna ma swoje charakterystyczne wrtosci,filtruje to i wrzucam
+#filter linie to temp files wartosci,skrot i nazwa
 grep '[0-9],[0-9]' linie > wartosci
 grep '[^()][[:upper:]]\{3\}' linie > skrot
 grep '^[[:alpha:]]' linie > nazwa
 
-#teraz mam juz poszczegolne wartosci w osobnych plikach
-#obliczam ilosc wierszy kozystajac z jednego pliku
+#count lines
 WIERSZE=$(grep -c '[[:alpha:]]' nazwa)
 #licznik petli
 a=1
-#plik wynikowy w ktorym beda nadpisywal wiersze
+#result file
 touch wynik
 #while bedzie tworzyl kazdy wiersz za pomoca echo na ktore bedzie sie skladac
 #linijki z poszczegolnych plikow wyluskanych headem do numeru wiersza
@@ -32,8 +28,7 @@ echo -e "$KOL1 \t $KOL2 \t $KOL3" >>wynik
 a=$[a+1]
 done
 cat wynik
-#usuwam pliki robocze aby nie zasmiecaly dysku
-#pamietac ze wynik sie nadpisuje
+#del temp files
 rm wynik
 rm wartosci
 rm skrot
