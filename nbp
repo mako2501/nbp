@@ -1,8 +1,5 @@
 #!/bin/bash
-#zadanie dodatkowe 
-#Rafal Makowski s8113 
 #pobieram do zmiennej zawartosc strony i od razu filtruje do linijki ktora zawiera wszytkie
-#informacje na temat walut, znajduje ja przez ciag znakow Nazwa waluty
 
 LINIA=$(GET -a http://nbp.pl/home.aspx?f=/kursy/kursya.html|grep 'Nazwa waluty') 
 #aby kozystac z grepa musze rozbic ta linie na wiele innych
@@ -12,7 +9,6 @@ LINIA=$(GET -a http://nbp.pl/home.aspx?f=/kursy/kursya.html|grep 'Nazwa waluty')
 #filtruje grepem aby uzyskac tylko i wylacznie w kazdej lini potrzebne ciagi znakow
 echo $LINIA | tr '\>' '\n'|grep -v '^<\|^[[:upper:]][[:lower:]]\|-\|^[[:blank:]]'|tr '\<' '\n'|grep -v '/\|\.[[:alpha:]]'>linie
 #kazda pozniejsza kolumna ma swoje charakterystyczne wrtosci,filtruje to i wrzucam
-#do plikow roboczych aby je rozdzielic
 grep '[0-9],[0-9]' linie > wartosci
 grep '[^()][[:upper:]]\{3\}' linie > skrot
 grep '^[[:alpha:]]' linie > nazwa
